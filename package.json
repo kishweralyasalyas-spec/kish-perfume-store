@@ -1,0 +1,12 @@
+{
+  "name": "kish-perfume-store",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kish perfume storefront and lightweight Node.js backend",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
