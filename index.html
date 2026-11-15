@@ -315,6 +315,7 @@
     const menuButton = document.querySelector(".menu-button");
     const navLinks = document.querySelector(".nav-links");
     let productsById = new Map();
+    let staticDemoMode = false;
 
     async function apiRequest(path, body) {
       const response = await fetch(path, {
@@ -327,15 +328,22 @@
       return result;
     }
 
-    apiRequest("/api/products")
+    apiRequest("api/products")
       .then(({ products }) => {
         productsById = new Map(products.map(product => [product.id, product]));
       })
       .catch(() => {
-        document.querySelectorAll(".quick-add").forEach(button => {
-          button.disabled = true;
-          button.textContent = "Temporarily unavailable";
-        });
+        staticDemoMode = true;
+        productsById = new Map(
+          [...document.querySelectorAll(".product-card")].map(card => {
+            const button = card.querySelector(".quick-add");
+            return [button.dataset.productId, {
+              id: button.dataset.productId,
+              name: card.querySelector(".product-name").textContent.trim(),
+              price: Number(card.querySelector(".product-price").textContent.replace(/[^\d.]/g, "")),
+            }];
+          })
+        );
       });
 
     function renderCart() {
@@ -392,6 +400,10 @@
       checkoutButton.disabled = true;
       checkoutMessage.textContent = "Saving your order…";
       try {
+        if (staticDemoMode) {
+          checkoutMessage.textContent = "Demo only: orders aren't saved and no payment is taken.";
+          return;
+        }
         const order = await apiRequest("/api/orders", {
           items: bag.map(({ productId, quantity }) => ({ productId, quantity })),
         });
@@ -423,6 +435,10 @@
       const message = document.querySelector(".newsletter-message");
       const email = document.querySelector("#email");
       const submitButton = event.target.querySelector("button");
+      if (staticDemoMode) {
+        message.textContent = "Demo only: newsletter signups aren't saved.";
+        return;
+      }
       submitButton.disabled = true;
       message.textContent = "Adding you to the list…";
       try {

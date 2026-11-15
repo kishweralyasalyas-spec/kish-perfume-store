@@ -10,6 +10,15 @@ node server.js
 
 Open [http://localhost:3000](http://localhost:3000). Set the `PORT` environment variable to use a different port.
 
+## Publish a free static demo on GitHub Pages
+
+GitHub Pages hosts the storefront without running the Node.js backend. The product catalog and bag work as a demo, but orders and newsletter signups are not saved and checkout does not take payment.
+
+1. In the GitHub repository, open **Settings** → **Pages**.
+2. Under **Build and deployment**, choose **Deploy from a branch**.
+3. Select the `main` branch and `/(root)` folder, then click **Save**.
+4. Wait for the Pages deployment, then open the URL shown on the Pages settings screen. It will look like `https://YOUR-USERNAME.github.io/kish-perfume-store/`.
+
 ## Publish on Render
 
 This project includes a Render Blueprint in `render.yaml`.
